@@ -1,0 +1,20 @@
+name: Validate deployment manifest
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate deployment script syntax
+        run: bash -n scripts/apply
+      - name: Validate example Compose manifest
+        run: docker compose --env-file env/robots/uav-dev-01.env.example -f compose/base.compose.yml config --quiet
+

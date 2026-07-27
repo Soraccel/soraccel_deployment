@@ -1,0 +1,21 @@
+services:
+  mapping_3d:
+    image: ${MAPPING_3D_IMAGE:?Set MAPPING_3D_IMAGE to an immutable GHCR digest}
+    container_name: soraccel-mapping-3d
+    network_mode: host
+    runtime: nvidia
+    restart: unless-stopped
+    init: true
+    read_only: true
+    environment:
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:?Set ROS_DOMAIN_ID}
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      RCUTILS_COLORIZED_OUTPUT: "1"
+    volumes:
+      - ${ROBOT_CONFIG_DIR:?Set ROBOT_CONFIG_DIR}/mapping_3d:/config:ro
+      - /var/log/soraccel:/var/log/soraccel
+    tmpfs:
+      - /tmp:mode=1777,size=256m
+    security_opt:
+      - no-new-privileges:true
+

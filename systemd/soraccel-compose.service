@@ -1,0 +1,17 @@
+[Unit]
+Description=Apply an approved Soraccel deployment revision
+Wants=docker.service
+After=docker.service network-online.target
+
+[Service]
+Type=oneshot
+User=sora
+Group=sora
+EnvironmentFile=/etc/soraccel/deployment.env
+WorkingDirectory=/opt/soraccel/deployment
+ExecStart=/opt/soraccel/deployment/scripts/apply ${DEPLOYMENT_ENV}
+TimeoutStartSec=15min
+
+[Install]
+WantedBy=multi-user.target
+
