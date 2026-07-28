@@ -1,77 +1,51 @@
 # Soraccel deployment
 
-This repository is the versioned source of truth for robot runtime composition.
-It only references published container images pinned by digest: no ROS 2 source
-code is built or mounted on the robot.
+This public repository is the versioned desired state of Soraccel robots. It
+contains no operational scripts and no secrets.
 
-## Layout
+## Contents
 
-- `compose/`: runtime services.
-- `env/robots/`: non-secret, reviewed image references and ROS settings per robot.
-- `/etc/soraccel/<robot-id>/`: robot-only configuration and calibration; it is
-  deliberately outside Git and mounted read-only.
-- `scripts/apply`: validates, pulls and starts an approved environment.
-- `systemd/`: optional boot-time service.
+```text
+robots/
+└── <robot-id>/
+    └── deployment.yaml
+```
 
-## Add a robot
+The robot installs a selected revision of this repository under
+`/opt/soraccel/deployment`. The separate
+[`soraccel_setup`](https://github.com/Soraccel/soraccel_setup) repository owns
+bootstrap, Compose rendering and user-systemd management.
 
-On a fresh Jetson flashed with JetPack 7, run the bootstrap script as root. It
-installs Docker and Compose, configures the pre-provisioned `sora` account,
-securely asks for a GHCR token, verifies the NVIDIA runtime and checks out one
-approved deployment revision:
+## Manifest
+
+```yaml
+environment:
+  RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+
+components:
+  mapping_3d:
+    image: ghcr.io/soraccel/mapping_3d:v0.1.1@sha256:...
+    enabled_at_boot:
+      - mapper
+```
+
+Every image embeds the `repository.yaml` used during its build. `apply` reads
+that file from the pulled image and creates one user-systemd service for each
+declared launch. `enabled_at_boot` selects which of those services starts on
+boot; it is a robot policy and is never declared by the component.
+
+Robot-local values and credentials never go here. Keep them under
+`/etc/soraccel/config` and `/etc/soraccel`, respectively.
+
+## Update
+
+After a reviewed manifest is merged, install its explicit tag or commit on the
+robot using the setup agent:
 
 ```bash
-sudo ./scripts/bootstrap-robot \
-  --robot-id uav-dev-01 \
+sudo /opt/soraccel/setup/scripts/install-deployment-revision \
   --deployment-ref <approved-tag-or-commit>
+/opt/soraccel/setup/scripts/apply
 ```
 
-The default service account is `sora`. For a client-provisioned Jetson, pass
-the existing account explicitly; the script never creates it:
-
-```bash
-sudo ./scripts/bootstrap-robot \
-  --robot-id customer-uav-01 \
-  --service-user customer \
-  --deployment-ref <approved-tag-or-commit>
-```
-
-If this repository is public, the same script can be distributed with one
-command:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/Soraccel/soraccel_deployment/main/scripts/bootstrap-robot \
-  | sudo bash -s -- --robot-id uav-dev-01 --deployment-ref <approved-tag-or-commit>
-```
-
-The GHCR token must belong to the limited `soraccel-robot` account and have
-only `read:packages`. It is stored at `/etc/soraccel/ghcr.token` as
-`root:sora`, mode `0640`.
-
-After bootstrap:
-
-1. Copy `env/robots/uav-dev-01.env.example` to an appropriately named `.env`
-   file, replace the placeholder image digest and commit that file.
-2. On the robot, create the configuration directory named by `ROBOT_CONFIG_DIR`.
-   For `mapping_3d`, add `mapping_3d/mapping_3d.yaml` there.
-3. From an approved revision of this repository, run:
-
-   ```bash
-   /opt/soraccel/deployment/scripts/apply \
-     /opt/soraccel/deployment/env/robots/uav-dev-01.env
-   ```
-
-`apply` refuses floating tags: every deployed image must include `@sha256:`.
-The robot only pulls and runs the compiled runtime image.
-
-## Rollback
-
-Check out the previously approved deployment commit, then run the same
-`scripts/apply` command. Docker will reuse or pull the exact digest recorded in
-that revision.
-
-## Secrets
-
-Do not commit GitHub tokens, Wi-Fi credentials, calibration files or private
-keys. Keep the GHCR token in `/etc/soraccel/ghcr.env` and robot configuration
-under `/etc/soraccel` with restrictive permissions.
+This updates the desired state only. It does not update the setup scripts.

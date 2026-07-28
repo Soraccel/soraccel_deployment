@@ -1,4 +1,4 @@
-name: Validate deployment manifest
+name: Validate deployment manifests
 
 on:
   pull_request:
@@ -13,8 +13,14 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Validate deployment script syntax
-        run: bash -n scripts/apply
-      - name: Validate example Compose manifest
-        run: docker compose --env-file env/robots/uav-dev-01.env.example -f compose/base.compose.yml config --quiet
-
+      - run: sudo apt-get update && sudo apt-get install --yes python3-yaml
+      - run: python3 - <<'PY'
+          import pathlib
+          import yaml
+          for path in pathlib.Path("robots").glob("*/deployment.yaml"):
+              data = yaml.safe_load(path.read_text())
+              assert isinstance(data.get("components"), dict) and data["components"]
+              for name, component in data["components"].items():
+                  assert "@sha256:" in component["image"], name
+                  assert isinstance(component.get("enabled_at_boot", []), list), name
+          PY
