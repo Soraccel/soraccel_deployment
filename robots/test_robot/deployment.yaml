@@ -2,7 +2,7 @@
 # Values in environment are written to runtime.env and injected into every
 # component container; do not place credentials here.
 environment:
-  SORACCEL_ROBOT_ID : test-robot
+  SORACCEL_ROBOT_ID: test_robot
   RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
   RCUTILS_COLORIZED_OUTPUT: "1"
 
