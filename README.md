@@ -8,7 +8,9 @@ contains no operational scripts and no secrets.
 ```text
 robots/
 └── <robot-id>/
-    └── deployment.yaml
+    ├── deployment.yaml
+    └── config/
+        └── <component>.yaml
 ```
 
 The robot installs a selected revision of this repository under
@@ -34,8 +36,12 @@ that file from the pulled image and creates one user-systemd service for each
 declared launch. `enabled_at_boot` selects which of those services starts on
 boot; it is a robot policy and is never declared by the component.
 
-Robot-local values and credentials never go here. Keep them under
-`/etc/soraccel/config` and `/etc/soraccel`, respectively.
+All non-secret configuration files are versioned in
+`robots/<robot-id>/config/`. At `apply`, this flat directory is mirrored to
+`/etc/soraccel/config/`; removed files are removed from the robot as well.
+Component metadata refers to those files by basename, for example
+`/config/mapping_3d.yaml`. Never place credentials in this public repository;
+they remain only under `/etc/soraccel` on the robot.
 
 ## Update
 

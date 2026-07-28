@@ -21,6 +21,9 @@ jobs:
           for path in pathlib.Path("robots").glob("*/deployment.yaml"):
               data = yaml.safe_load(path.read_text())
               assert isinstance(data.get("components"), dict) and data["components"]
+              config_dir = path.parent / "config"
+              assert config_dir.is_dir(), f"missing {config_dir}"
+              assert all(item.is_file() for item in config_dir.iterdir()), config_dir
               for name, component in data["components"].items():
                   assert "@sha256:" in component["image"], name
                   assert isinstance(component.get("enabled_at_boot", []), list), name
