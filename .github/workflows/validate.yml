@@ -14,7 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install --yes python3-yaml
-      - run: python3 - <<'PY'
+      - run: |
+          python3 - <<'PY'
           import pathlib
           import yaml
           for path in pathlib.Path("robots").glob("*/deployment.yaml"):
