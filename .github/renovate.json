@@ -5,9 +5,9 @@
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^env\\/robots\\/.+\\.env$/"],
+      "managerFilePatterns": ["/^robots\\/[^/]+\\/deployment\\.yaml$/"],
       "matchStrings": [
-        "MAPPING_3D_IMAGE=(?<depName>ghcr\\.io\\/soraccel\\/mapping_3d):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
+        "image:\\s*(?<depName>ghcr\\.io\\/soraccel\\/[a-zA-Z0-9_.-]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]{64})"
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "semver-coerced"
@@ -20,4 +20,3 @@
     }
   ]
 }
-
