@@ -8,5 +8,5 @@ environment:
 
 components:
   mapping_3d:
-    image: ghcr.io/soraccel/mapping_3d:v0.1.1@sha256:2536b99a097b632f21ea13f5c1bb08da3c1806b90a423b472a896644d6d0fe53
+    image: ghcr.io/soraccel/mapping_3d:v0.1.3@sha256:6c6839ca12b9145001c6de1ff052257fc88cb3159879937ce5976ef24f2d22a6
     enabled_at_boot: []
