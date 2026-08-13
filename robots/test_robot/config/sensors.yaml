@@ -1,0 +1,42 @@
+sensors:
+  ros__parameters:
+    usb_cameras:
+      default:
+        width: 640
+        height: 480
+        pixel_format: YUYV
+        output_encoding: rgb8
+        framerate: 15.0
+      cameras:
+        - name: camera_0
+          device: /dev/video0
+          namespace: sensors/camera_0
+          frame_id: camera_0_optical_frame
+          enabled: true
+        - name: camera_1
+          device: /dev/video10
+          namespace: sensors/camera_1
+          frame_id: camera_1_optical_frame
+          enabled: true
+    realsense_cameras:
+      default:
+        initial_reset: true
+        enable_color: false
+        enable_depth: true
+        enable_infra1: false
+        enable_infra2: false
+        enable_gyro: false
+        enable_accel: false
+        unite_imu_method: 0
+        align_depth.enable: false
+        pointcloud.enable: false
+        depth_module.depth_profile: 480x270x15
+      cameras:
+        - name: realsense_0
+          namespace: sensors/realsense_0
+          usb_port_id: 1-2.4.2
+          enabled: true
+        - name: realsense_1
+          namespace: sensors/realsense_1
+          usb_port_id: 1-2.4.3
+          enabled: true
