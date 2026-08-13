@@ -3,7 +3,9 @@
 # component container; do not place credentials here.
 environment:
   SORACCEL_ROBOT_ID: test_robot
+  ROS_DOMAIN_ID: "0"
   RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+  CYCLONEDDS_URI: '<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlP1p1s0" priority="default" multicast="default" /></Interfaces></General></Domain></CycloneDDS>'
   RCUTILS_COLORIZED_OUTPUT: "1"
 
 components:
