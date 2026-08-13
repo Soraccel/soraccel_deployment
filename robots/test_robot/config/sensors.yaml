@@ -7,16 +7,23 @@ sensors:
         pixel_format: YUYV
         output_encoding: rgb8
         framerate: 15.0
+        # Stable quality controls for the current Sunplus USB cameras.
+        # Higher resolutions were tested but overloaded the current USB 2.1
+        # RealSense path on local-nano.
+        focus_automatic_continuous: true
+        power_line_frequency: 1
+        sharpness: 3
+        white_balance_automatic: true
       cameras:
-        - name: camera_0
-          device: /dev/video0
-          namespace: sensors/camera_0
-          frame_id: camera_0_optical_frame
-          enabled: true
-        - name: camera_1
+        - name: rgb_front
           device: /dev/video10
-          namespace: sensors/camera_1
-          frame_id: camera_1_optical_frame
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras/rgb_front
+          frame_id: rgb_front_optical_frame
+          enabled: true
+        - name: rgb_rear
+          device: /dev/video0
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras/rgb_rear
+          frame_id: rgb_rear_optical_frame
           enabled: true
     realsense_cameras:
       default:
@@ -32,11 +39,11 @@ sensors:
         pointcloud.enable: false
         depth_module.depth_profile: 480x270x15
       cameras:
-        - name: realsense_0
-          namespace: sensors/realsense_0
+        - name: depth_rear
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras
           usb_port_id: 1-2.4.2
           enabled: true
-        - name: realsense_1
-          namespace: sensors/realsense_1
+        - name: depth_front
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras
           usb_port_id: 1-2.4.3
           enabled: true
