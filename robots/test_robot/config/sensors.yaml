@@ -1,0 +1,111 @@
+sensors:
+  ros__parameters:
+    usb_cameras:
+      default:
+        width: 640
+        height: 480
+        pixel_format: YUYV
+        output_encoding: rgb8
+        framerate: 15.0
+        # Stable quality controls for the current Sunplus USB cameras.
+        # Higher resolutions were tested but overloaded the current USB 2.1
+        # RealSense path on local-nano.
+        focus_automatic_continuous: true
+        power_line_frequency: 1
+        sharpness: 3
+        white_balance_automatic: true
+      cameras:
+        - name: rgb_front
+          device: /dev/v4l/by-path/platform-3610000.usb-usb-0:2.4.4:1.0-video-index0
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras/rgb_front
+          frame_id: rgb_front_optical_frame
+          enabled: true
+        - name: rgb_rear
+          device: /dev/v4l/by-path/platform-3610000.usb-usb-0:2.4.1:1.0-video-index0
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras/rgb_rear
+          frame_id: rgb_rear_optical_frame
+          enabled: true
+    realsense_cameras:
+      default:
+        initial_reset: true
+        enable_color: false
+        enable_depth: true
+        enable_infra1: false
+        enable_infra2: false
+        enable_gyro: false
+        enable_accel: false
+        unite_imu_method: 0
+        align_depth.enable: false
+        pointcloud.enable: false
+        depth_module.depth_profile: 480x270x15
+      cameras:
+        - name: depth_rear
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras
+          usb_port_id: 1-2.4.2
+          enabled: true
+        - name: depth_front
+          namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras
+          usb_port_id: 1-2.4.3
+          enabled: true
+    robosense_lidars:
+      default:
+        # Direct raw RoboSense UDP driver. The RoboSense LiDAR must be
+        # configured to send MSOP/DIFOP packets to 192.168.1.102.
+        enabled: true
+        lidar_type: RSHELIOS
+        msop_port: 6699
+        difop_port: 7788
+        imu_port: 0
+        host_address: 192.168.1.102
+        group_address: 0.0.0.0
+        min_distance: 0.2
+        max_distance: 200.0
+        wait_for_difop: false
+        use_lidar_clock: false
+        dense_points: false
+        ts_first_point: true
+        start_angle: 0
+        end_angle: 360
+        # Frame written into PointCloud2.header.frame_id.
+        # This does not publish a TF transform.
+        reference_frame_id: robosense_lidar
+        point_cloud_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
+        packet_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/packets
+        imu_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/imu
+        queue_length: 100
+      lidars:
+        - name: robosense
+          namespace: sensors/lidars
+          enabled: true
+    unitree_pointclouds:
+      default:
+        enabled: false
+        input_topic: /rslidar_points
+        output_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
+        # Frame written into PointCloud2.header.frame_id.
+        # This does not publish a TF transform.
+        reference_frame_id: robosense_lidar
+        qos_reliability: reliable
+        queue_depth: 10
+      pointclouds:
+        - name: robosense
+          namespace: sensors/lidars
+          enabled: false
+    pointcloud_relays:
+      default:
+        # Reformat the RoboSense cloud for Exwayz SLAM.
+        # The source cloud stays available on:
+        # /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
+        enabled: false
+        input_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
+        output_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_exwayz
+        # Frame written into PointCloud2.header.frame_id.
+        # This does not publish a TF transform.
+        reference_frame_id: ${SORACCEL_ROBOT_ID}_lidar_link
+        flatten: true
+        qos_reliability: reliable
+        queue_depth: 10
+      pointclouds:
+        - name: robosense_exwayz
+          namespace: sensors/lidars
+          enabled: true

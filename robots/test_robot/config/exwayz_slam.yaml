@@ -1,0 +1,48 @@
+slam:
+  enable_motion_compensation: false
+
+  pre_process:
+    num_threads: 2
+    num_rows: 32
+    num_cols: 512
+    keep_strategy: farthest
+    range_min: 1.0
+    range_max: 150.0
+    center: [0.0, 0.0, 0.0]
+    size: [1.0, 1.0, 1.0]
+    grid_resolution: 0.1
+
+  icp:
+    num_threads: 2
+    num_iter: 5
+    d_max: 0.5
+
+  map_local:
+    d_update: 0.1
+    d_prune: 200.0
+    normals_knn: 30
+    resolution: 0.2
+
+  checks:
+    input_rejection_ratio: 0.2
+
+  output:
+    pc_mode: 2
+
+  ros:
+    namespace: /${SORACCEL_ROBOT_ID}/localization/exwayz/slam
+
+    input_pointcloud2:
+      topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_exwayz
+      queue_size: 20
+
+    output_odometry:
+      topic: /odometry
+      parent_frame_id: ${SORACCEL_ROBOT_ID}_map
+      child_frame_id: ${SORACCEL_ROBOT_ID}_lidar_link
+      invert: false
+      publish_tf: true
+
+    output_pointcloud2:
+      topic: /pointcloud2
+      frame_id: ${SORACCEL_ROBOT_ID}_lidar_link
