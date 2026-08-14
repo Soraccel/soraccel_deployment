@@ -1,0 +1,24 @@
+localization:
+  ros__parameters:
+    exwayz:
+      enabled: true
+
+      # Exwayz 1.4.1 exposes rclcpp components. They are loaded into one
+      # isolated component container to match the vendor examples.
+      container:
+        name: main_container
+        namespace: ""
+        package: rclcpp_components
+        executable: component_container_isolated
+
+      components:
+        - name: slam
+          package: exwayz
+          plugin: exwayz::SLAM
+          namespace: ""
+          config: /config/exwayz_slam.yaml
+          key: slam
+          parameters: {}
+          remappings: {}
+          extra_arguments:
+            use_intra_process_comms: true

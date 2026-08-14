@@ -16,12 +16,12 @@ sensors:
         white_balance_automatic: true
       cameras:
         - name: rgb_front
-          device: /dev/video10
+          device: /dev/v4l/by-path/platform-3610000.usb-usb-0:2.4.4:1.0-video-index0
           namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras/rgb_front
           frame_id: rgb_front_optical_frame
           enabled: true
         - name: rgb_rear
-          device: /dev/video0
+          device: /dev/v4l/by-path/platform-3610000.usb-usb-0:2.4.1:1.0-video-index0
           namespace: ${SORACCEL_ROBOT_ID}/sensors/cameras/rgb_rear
           frame_id: rgb_rear_optical_frame
           enabled: true
@@ -91,3 +91,21 @@ sensors:
         - name: robosense
           namespace: sensors/lidars
           enabled: false
+    pointcloud_relays:
+      default:
+        # Reformat the RoboSense cloud for Exwayz SLAM.
+        # The source cloud stays available on:
+        # /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
+        enabled: false
+        input_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
+        output_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_exwayz
+        # Frame written into PointCloud2.header.frame_id.
+        # This does not publish a TF transform.
+        reference_frame_id: ${SORACCEL_ROBOT_ID}_lidar_link
+        flatten: true
+        qos_reliability: reliable
+        queue_depth: 10
+      pointclouds:
+        - name: robosense_exwayz
+          namespace: sensors/lidars
+          enabled: true
