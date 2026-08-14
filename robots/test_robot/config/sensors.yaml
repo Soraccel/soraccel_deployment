@@ -98,7 +98,7 @@ sensors:
         # /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
         enabled: false
         input_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points
-        output_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_exwayz
+        output_topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_flattened
         # Frame written into PointCloud2.header.frame_id.
         # This does not publish a TF transform.
         reference_frame_id: ${SORACCEL_ROBOT_ID}_lidar_link

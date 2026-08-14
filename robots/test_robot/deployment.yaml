@@ -12,3 +12,9 @@ components:
   mapping_3d:
     image: ghcr.io/soraccel/mapping_3d:v0.1.3@sha256:6c6839ca12b9145001c6de1ff052257fc88cb3159879937ce5976ef24f2d22a6
     enabled_at_boot: []
+  localization:
+    image: ghcr.io/soraccel/localization:v0.0.1@sha256:b10e755f2143cce8845160ddc7d589dd3e2888d0640d9d2591091a6329abb737
+    enabled_at_boot: []
+  sensors:
+    image: ghcr.io/soraccel/sensors:v0.1.0@sha256:25d37f984e1da77eaf6ee9781199712ad05d64e839e807d29e931aea9a5797d7
+    enabled_at_boot: []

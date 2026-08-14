@@ -33,7 +33,7 @@ slam:
     namespace: /${SORACCEL_ROBOT_ID}/localization/exwayz/slam
 
     input_pointcloud2:
-      topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_exwayz
+      topic: /${SORACCEL_ROBOT_ID}/sensors/lidars/robosense/points_flattened
       queue_size: 20
 
     output_odometry:
