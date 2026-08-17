@@ -50,13 +50,13 @@ sensors:
     robosense_lidars:
       default:
         # Direct raw RoboSense UDP driver. The RoboSense LiDAR must be
-        # configured to send MSOP/DIFOP packets to 192.168.1.102.
+        # configured to send MSOP/DIFOP packets to SORACCEL_LIDAR_HOST_IP.
         enabled: true
         lidar_type: RSHELIOS
-        msop_port: 6699
-        difop_port: 7788
+        msop_port: ${SORACCEL_LIDAR_MSOP_PORT}
+        difop_port: ${SORACCEL_LIDAR_DIFOP_PORT}
         imu_port: 0
-        host_address: 192.168.1.102
+        host_address: ${SORACCEL_LIDAR_HOST_IP}
         group_address: 0.0.0.0
         min_distance: 0.2
         max_distance: 200.0
