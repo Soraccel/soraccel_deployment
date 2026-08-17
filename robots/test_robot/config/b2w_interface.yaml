@@ -1,0 +1,21 @@
+/**:
+  ros__parameters:
+    unitree_network_interface: enP8p1s0
+    pc_network_interface: wlP1p1s0
+    unitree_domain_id: 0
+    cmd_vel_topic: /test_robot/b2w/cmd_vel
+    sport_request_topic: /api/sport/request
+    command_rate_hz: 20.0
+    command_timeout_sec: 0.35
+    rpc_timeout_sec: 2.0
+    max_linear_x: 0.6
+    max_linear_y: 0.4
+    max_angular_z: 0.8
+    deadband_linear: 0.01
+    deadband_angular: 0.01
+    switch_gait_on_motion: true
+    motion_gait: 1
+    auto_stand_up: false
+    stop_on_shutdown: true
+    worker_host: 127.0.0.1
+    worker_port: 37620
