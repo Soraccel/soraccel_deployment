@@ -5,7 +5,7 @@ environment:
   SORACCEL_ROBOT_ID: test_robot
   ROS_DOMAIN_ID: "0"
   RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
-  CYCLONEDDS_URI: '<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlP1p1s0" priority="default" multicast="default" /></Interfaces></General></Domain></CycloneDDS>'
+  CYCLONEDDS_URI: '<CycloneDDS><Domain><General><Interfaces><NetworkInterface name="wlP1p1s0" priority="default" multicast="true" /></Interfaces><AllowMulticast>true</AllowMulticast></General></Domain></CycloneDDS>'
   RCUTILS_COLORIZED_OUTPUT: "1"
 
 components:
@@ -19,5 +19,5 @@ components:
     image: ghcr.io/soraccel/sensors:v0.1.1@sha256:eff956cfcb8b01505267fb44cc7f9ba76c571e88306df0a4678ec11b4a71c0fa
     enabled_at_boot: []
   b2w_interface:
-    image: ghcr.io/soraccel/b2w_interface:main
+    image: ghcr.io/soraccel/b2w_interface:v0.1.0@sha256:3be6014d4f1c24bf4f030bfb1a5ecc57c4c7e3ef49a7a1c4524ad0a997e37126
     enabled_at_boot: []

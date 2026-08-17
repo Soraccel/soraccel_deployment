@@ -8,9 +8,9 @@
     command_rate_hz: 20.0
     command_timeout_sec: 0.35
     rpc_timeout_sec: 2.0
-    max_linear_x: 0.6
-    max_linear_y: 0.4
-    max_angular_z: 0.8
+    max_linear_x: 3.0
+    max_linear_y: 1.0
+    max_angular_z: 1.0
     deadband_linear: 0.01
     deadband_angular: 0.01
     switch_gait_on_motion: true
